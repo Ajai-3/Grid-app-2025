@@ -1,5 +1,13 @@
 import React from "react";
-import { Upload, Maximize2, Minimize2, Download, Grid, Type, Minus, Image, Palette } from "lucide-react";
+import {
+  Upload,
+  Maximize2,
+  Minimize2,
+  Download,
+  Grid,
+  Image,
+  Palette,
+} from "lucide-react";
 
 export default function Toolbar({
   fileInputRef,
@@ -23,9 +31,12 @@ export default function Toolbar({
   setShowGrid,
   blackAndWhite,
   setBlackAndWhite,
+  showNumbers,
+  setShowNumbers,
 }) {
+  
   return (
-    <div className="flex flex-col gap-4 items-start bg-gray-900 p-4 rounded-lg shadow-lg border border-gray-700 w-72">
+    <div className="flex flex-col gap-4 items-start bg-zinc-900 p-4 rounded-lg shadow-lg border border-gray-700 w-72">
       {/* Upload Section */}
       <div className="w-full">
         <input
@@ -48,7 +59,7 @@ export default function Toolbar({
         <h3 className="text-sm font-semibold text-gray-300 flex items-center gap-2">
           <Grid size={16} /> Grid Settings
         </h3>
-        
+
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
             <label className="text-xs text-gray-400">Rows (mm)</label>
@@ -108,6 +119,7 @@ export default function Toolbar({
         </h3>
 
         <div className="space-y-2">
+          {/* Show Grid */}
           <label className="flex items-center justify-between cursor-pointer">
             <span className="text-xs text-gray-400">Show Grid</span>
             <div className="relative inline-flex items-center cursor-pointer">
@@ -117,10 +129,11 @@ export default function Toolbar({
                 onChange={(e) => setShowGrid(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+              <div className="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
             </div>
           </label>
 
+          {/* Black & White */}
           <label className="flex items-center justify-between cursor-pointer">
             <span className="text-xs text-gray-400">Black & White</span>
             <div className="relative inline-flex items-center cursor-pointer">
@@ -130,10 +143,27 @@ export default function Toolbar({
                 onChange={(e) => setBlackAndWhite(e.target.checked)}
                 className="sr-only peer"
               />
-              <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+              <div className="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
             </div>
           </label>
 
+          {/* Show Numbers (only if grid is ON) */}
+          {showGrid && (
+            <label className="flex items-center justify-between cursor-pointer">
+              <span className="text-xs text-gray-400">Show Numbers</span>
+              <div className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showNumbers}
+                  onChange={(e) => setShowNumbers(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+              </div>
+            </label>
+          )}
+
+          {/* Diagonals */}
           {showGrid && (
             <>
               <label className="flex items-center justify-between cursor-pointer">
@@ -145,7 +175,7 @@ export default function Toolbar({
                     onChange={(e) => setShowDiagonal(e.target.checked)}
                     className="sr-only peer"
                   />
-                  <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                  <div className="w-9 h-5 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
                 </div>
               </label>
 
@@ -178,13 +208,17 @@ export default function Toolbar({
           className="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg transition-colors font-medium text-sm"
           onClick={toggleRealSize}
           style={{
-            backgroundColor: realSizeMode ? '#ef4444' : '#10b981',
+            backgroundColor: realSizeMode ? "#ef4444" : "#10b981",
           }}
           onMouseOver={(e) => {
-            e.target.style.backgroundColor = realSizeMode ? '#dc2626' : '#059669';
+            e.target.style.backgroundColor = realSizeMode
+              ? "#dc2626"
+              : "#059669";
           }}
           onMouseOut={(e) => {
-            e.target.style.backgroundColor = realSizeMode ? '#ef4444' : '#10b981';
+            e.target.style.backgroundColor = realSizeMode
+              ? "#ef4444"
+              : "#10b981";
           }}
         >
           {realSizeMode ? (
