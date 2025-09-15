@@ -25,6 +25,7 @@ export default function ImageCanvas({
   gridColor,
   showGrid,
   blackAndWhite,
+  showNumbers,
 }) {
   const paperSizesMM = { A5: [148, 210], A4: [210, 297], A3: [297, 420] };
   const mmToPx = (mm) => (mm * dpi) / 25.4;
@@ -74,31 +75,26 @@ export default function ImageCanvas({
         />
       );
 
-      // top numbers
-      labels.push(
-        <text
-          key={`vt-${c}`}
-          x={x + 2}
-          y={12}
-          fontSize="10"
-          fill={gridColor}
-        >
-          {c + 1}
-        </text>
-      );
-
-      // bottom numbers
-      labels.push(
-        <text
-          key={`vb-${c}`}
-          x={x + 2}
-          y={displayedSize.h - 2}
-          fontSize="10"
-          fill={gridColor}
-        >
-          {c + 1}
-        </text>
-      );
+      if (showNumbers) {
+        // top numbers
+        labels.push(
+          <text key={`vt-${c}`} x={x + 2} y={12} fontSize="10" fill={gridColor}>
+            {c + 1}
+          </text>
+        );
+        // bottom numbers
+        labels.push(
+          <text
+            key={`vb-${c}`}
+            x={x + 2}
+            y={displayedSize.h - 2}
+            fontSize="10"
+            fill={gridColor}
+          >
+            {c + 1}
+          </text>
+        );
+      }
     }
 
     // Horizontal lines + numbering (left + right)
@@ -116,33 +112,29 @@ export default function ImageCanvas({
         />
       );
 
-      // left numbers
-      labels.push(
-        <text
-          key={`hl-${r}-l`}
-          x={2}
-          y={y + 10}
-          fontSize="10"
-          fill={gridColor}
-        >
-          {r + 1}
-        </text>
-      );
-
-      // right numbers
-      labels.push(
-        <text
-          key={`hl-${r}-r`}
-          x={displayedSize.w - 20}
-          y={y + 10}
-          fontSize="10"
-          fill={gridColor}
-        >
-          {r + 1}
-        </text>
-      );
+      if (showNumbers) {
+        // left numbers
+        labels.push(
+          <text key={`hl-${r}-l`} x={2} y={y + 10} fontSize="10" fill={gridColor}>
+            {r + 1}
+          </text>
+        );
+        // right numbers
+        labels.push(
+          <text
+            key={`hl-${r}-r`}
+            x={displayedSize.w - 20}
+            y={y + 10}
+            fontSize="10"
+            fill={gridColor}
+          >
+            {r + 1}
+          </text>
+        );
+      }
     }
 
+    // Diagonals
     if (showDiagonal) {
       for (let r = 0; r < numRows; r++) {
         for (let c = 0; c < numCols; c++) {
