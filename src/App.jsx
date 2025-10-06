@@ -27,7 +27,7 @@ export default function App() {
   const [gridColor, setGridColor] = useState("#0b84ff");
   const [showGrid, setShowGrid] = useState(true);
   const [blackAndWhite, setBlackAndWhite] = useState(false);
-  const [showNumbers, setShowNumbers] = useState(false); 
+  const [showNumbers, setShowNumbers] = useState(false);
 
   const [realSizeMode, setRealSizeMode] = useState(false);
   const [cropRatio, setCropRatio] = useState("A4");
@@ -119,8 +119,50 @@ export default function App() {
 
   const handleTouchEnd = () => setIsPanning(false);
 
+  // ✅ Fixed Download Function
   const downloadImage = () => {
-    // ... your same download logic ...
+    if (!containerRef.current) return;
+
+    const content = containerRef.current.querySelector("div");
+    const rect = content.getBoundingClientRect();
+
+    const canvas = document.createElement("canvas");
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    const ctx = canvas.getContext("2d");
+
+    // Draw base image
+    const img = content.querySelector("img");
+    if (!img) return;
+
+    ctx.drawImage(img, 0, 0, rect.width, rect.height);
+
+    // Overlay grid/diagonals/numbers
+    const svg = content.querySelector("svg");
+    if (svg) {
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(svgBlob);
+
+      const svgImg = new Image();
+      svgImg.onload = () => {
+        ctx.drawImage(svgImg, 0, 0, rect.width, rect.height);
+
+        const link = document.createElement("a");
+        link.download = "download.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+        URL.revokeObjectURL(url);
+      };
+      svgImg.src = url;
+    } else {
+      // only image
+      const link = document.createElement("a");
+      link.download = "download.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
   };
 
   return (
@@ -152,8 +194,8 @@ export default function App() {
           setShowGrid={setShowGrid}
           blackAndWhite={blackAndWhite}
           setBlackAndWhite={setBlackAndWhite}
-          showNumbers={showNumbers} 
-          setShowNumbers={setShowNumbers} 
+          showNumbers={showNumbers}
+          setShowNumbers={setShowNumbers}
         />
       </div>
       <div className="flex w-full">
@@ -182,7 +224,7 @@ export default function App() {
           gridColor={gridColor}
           showGrid={showGrid}
           blackAndWhite={blackAndWhite}
-          showNumbers={showNumbers} // ✅ FIX ADDED
+          showNumbers={showNumbers}
         />
       </div>
 
